@@ -16,30 +16,37 @@ const config: Config = {
   projectName: 'execution-apis',
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   i18n: { defaultLocale: 'en', locales: ['en'] },
 
   plugins: [
+   "docusaurus-plugin-copy-page-button",
+
     ['@open-rpc/docusaurus-plugin', {
-      openRPCSpecPath: './execution-apis.json',
+      openRPCSpecPath: './openrpc.json',
       docOutputPath: './docs-api/api',
+      indexSlug: '/'
     }],
     ['@docusaurus/plugin-content-docs', {
       id: 'api',
-      path: 'docs-api/api',
-      routeBasePath: 'api',
+      path: 'docs-api',
+      routeBasePath: '/',
       sidebarPath: './docs-api/sidebars.ts',
+    }],
+    ['@docusaurus/plugin-client-redirects', {
+      redirects: [{ from: '/api', to: '/' }],
     }],
   ],
 
   presets: [
     ['classic', {
-      docs: {
-        path: 'docs-api/docs',
-        sidebarPath: './docs-api/sidebars.ts',
-        editUrl: 'https://github.com/ethereum/execution-apis/tree/main/',
-      },
+      docs: false,
       pages: {
         path: 'docs-api/src/pages',
       },
@@ -50,6 +57,15 @@ const config: Config = {
     } satisfies Preset.Options],
   ],
 
+  themes: [
+    ['@easyops-cn/docusaurus-search-local', {
+      hashed: true,
+      docsPluginIdForPreferredVersion: 'api',
+      docsRouteBasePath: '/',
+      indexBlog: false,
+    }],
+  ],
+
   staticDirectories: ['docs-api/static'],
 
   themeConfig: {
@@ -57,8 +73,7 @@ const config: Config = {
     navbar: {
       title: 'Execution APIs',
       items: [
-        { type: 'docSidebar', sidebarId: 'docsSidebar', label: 'Docs', position: 'left' },
-        { to: '/api', label: 'API Reference', position: 'left' },
+        { type: 'docSidebar', sidebarId: 'docsSidebar', docsPluginId: 'api', label: 'Docs', position: 'left' },
         { href: 'https://github.com/ethereum/execution-apis', label: 'GitHub', position: 'right' },
       ],
     },
