@@ -9,8 +9,7 @@ const config: Config = {
 
   /*future: { v4: true },*/
 
-  /* TODO replace url: 'https://ethereum.github.io', */
-  url: 'https://open-rpc.github.io',
+  url: 'https://ethereum.github.io',
   baseUrl: '/execution-apis/',
 
   organizationName: 'ethereum',
