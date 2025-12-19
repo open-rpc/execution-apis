@@ -21,6 +21,8 @@ const config: Config = {
   i18n: { defaultLocale: 'en', locales: ['en'] },
 
   plugins: [
+   "docusaurus-plugin-copy-page-button",
+
     ['@open-rpc/docusaurus-plugin', {
       openRPCSpecPath: './openrpc.json',
       docOutputPath: './docs-api/api',
