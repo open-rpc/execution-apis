@@ -23,7 +23,7 @@ const config: Config = {
 
   plugins: [
     ['@open-rpc/docusaurus-plugin', {
-      openRPCSpecPath: './execution-apis.json',
+      openRPCSpecPath: './openrpc.json',
       docOutputPath: './docs-api/api',
       indexSlug: '/'
     }],
