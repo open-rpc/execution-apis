@@ -150,8 +150,8 @@ This repository is licensed under [CC0](LICENSE).
 [validator]: https://open-rpc.github.io/schema-utils-js/functions/validateOpenRPCDocument.html
 [graphql-schema]: http://graphql-schema.ethdevops.io/?url=https://raw.githubusercontent.com/ethereum/execution-apis/main/graphql.json
 [eip-1767]: https://eips.ethereum.org/EIPS/eip-1767
-[contributors-guide]: docs/reference/contributors-guide.md
+[contributors-guide]: docs-api/docs/contributors-guide.md
 [json-schema]: https://json-schema.org
 [hive]: https://github.com/ethereum/hive
 [rpc-compat]: https://github.com/ethereum/hive/tree/master/simulators/ethereum/rpc-compat
-[test-gen]: docs/reference/tests.md
+[test-gen]: docs-api/docs/tests.md
