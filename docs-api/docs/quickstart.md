@@ -57,6 +57,10 @@ the production build call `npm run serve`
 
 For more information on the `@open-rpc/docusaurus-plugin` see the [docs](https://github.com/open-rpc/markdown-gen/blob/main/packages/docusaurus-plugin/README.md) for additional configuration options.
 
+#### Commits
+
+When the documentation build updates. The documentation updates should be committed as well.
+
 ### Testing
 
 There are several mechanisms for testing specification contributions and client
@@ -155,3 +159,4 @@ This repository is licensed under [CC0](LICENSE).
 [hive]: https://github.com/ethereum/hive
 [rpc-compat]: https://github.com/ethereum/hive/tree/master/simulators/ethereum/rpc-compat
 [test-gen]: docs-api/docs/tests.md
+[LICENSE]: https://github.com/ethereum/execution-apis/blob/main/LICENSE
