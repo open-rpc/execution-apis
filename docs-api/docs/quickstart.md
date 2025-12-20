@@ -43,11 +43,19 @@ to view the updated specs locally.
 ```console
 $ npm run build:docs
 $ npm run watch
+$ npm run start
 ```
 
-The `watch` command starts a local webserver serving the docs in-browser at
-`http://0.0.0.0:8000` and it rebuilds when you update something in the specs.  
-Please reload the page to see your changes.
+The `watch` command starts watching the local repository and rebuilds the spec
+and copies the `README.md` into the build. Running npm start starts a local
+development docusaurus server at `http://localhost:3000` and it rebuilds when you update something in the specs.  
+Sometimes you must reload the page to see your changes.
+
+There is also search to see the search index built you must `npm run build:docs` this builds
+a production ready version of the app, which will include a local search index. To access
+the production build call `npm run serve`
+
+For more information on the `@open-rpc/docusaurus-plugin` see the [docs](https://github.com/open-rpc/markdown-gen/blob/main/packages/docusaurus-plugin/README.md) for additional configuration options.
 
 ### Testing
 
@@ -135,16 +143,15 @@ $ npm run graphql:validate
 
 ## License
 
-This repository is licensed under [CC0][license].
+This repository is licensed under [CC0](LICENSE).
 
 [playground]: https://ethereum.github.io/execution-apis/api-documentation/
 [openrpc]: https://open-rpc.org
 [validator]: https://open-rpc.github.io/schema-utils-js/functions/validateOpenRPCDocument.html
 [graphql-schema]: http://graphql-schema.ethdevops.io/?url=https://raw.githubusercontent.com/ethereum/execution-apis/main/graphql.json
 [eip-1767]: https://eips.ethereum.org/EIPS/eip-1767
-[contributors-guide]: ./contributors-guide
+[contributors-guide]: docs-api/docs/contributors-guide.md
 [json-schema]: https://json-schema.org
 [hive]: https://github.com/ethereum/hive
 [rpc-compat]: https://github.com/ethereum/hive/tree/master/simulators/ethereum/rpc-compat
-[test-gen]: ./tests
-[license]: https://github.com/ethereum/execution-apis/blob/main/LICENSE
+[test-gen]: docs-api/docs/tests.md
