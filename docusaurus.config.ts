@@ -9,8 +9,7 @@ const config: Config = {
 
   /*future: { v4: true },*/
 
-  /* TODO replace url: 'https://ethereum.github.io', */
-  url: 'https://open-rpc.github.io',
+  url: 'https://ethereum.github.io',
   baseUrl: '/execution-apis/',
 
   organizationName: 'ethereum',
@@ -22,8 +21,10 @@ const config: Config = {
   i18n: { defaultLocale: 'en', locales: ['en'] },
 
   plugins: [
+   "docusaurus-plugin-copy-page-button",
+
     ['@open-rpc/docusaurus-plugin', {
-      openRPCSpecPath: './execution-apis.json',
+      openRPCSpecPath: './openrpc.json',
       docOutputPath: './docs-api/api',
       indexSlug: '/'
     }],
