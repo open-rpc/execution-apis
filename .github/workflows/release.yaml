@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - "v*.*.*"
+  # Manually cutting a release in the UI fires this (not push:tags), so the build
+  # still runs and uploads assets onto the release you just published.
+  release:
+    types: [published, prereleased]
   workflow_dispatch:
     inputs:
       tag:
@@ -23,10 +27,13 @@ concurrency:
 jobs:
   build-release:
     runs-on: ubuntu-latest
+    env:
+      # Resolve the tag across all three triggers: dispatch input, release event, tag push.
+      TAG: ${{ github.event.inputs.tag || github.event.release.tag_name || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
+          ref: ${{ github.event.inputs.tag || github.event.release.tag_name || github.ref }}
 
       - uses: actions/setup-go@v6
         with:
@@ -46,8 +53,6 @@ jobs:
         run: npm ci
 
       - name: Stamp spec version from tag
-        env:
-          TAG: ${{ github.event.inputs.tag || github.ref_name }}
         run: npm run spec:set-version -- --version "$TAG"
 
       - name: Build docs
@@ -56,8 +61,6 @@ jobs:
         run: npm run build:docs
 
       - name: Snapshot versioned docs
-        env:
-          TAG: ${{ github.event.inputs.tag || github.ref_name }}
         run: |
           VER="${TAG#v}"
           npx docusaurus docs:version:api "$VER"
@@ -109,14 +112,19 @@ jobs:
         with:
           name: docs-snapshot
 
-      - name: Create draft GitHub Release
+      - name: Attach assets to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+          TAG: ${{ github.event.inputs.tag || github.event.release.tag_name || github.ref_name }}
         run: |
-          gh release create "$TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "$TAG" \
-            --draft \
-            --generate-notes \
-            openrpc.json refs-openrpc.json "docs-snapshot-${TAG}.tar.gz"
+          set -euo pipefail
+          ASSETS=(openrpc.json refs-openrpc.json "docs-snapshot-${TAG}.tar.gz")
+
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            # add/replace these strictly these assets
+            echo "Release $TAG exists; attaching assets (additive)"
+            gh release upload "$TAG" --repo "$GITHUB_REPOSITORY" --clobber "${ASSETS[@]}"
+          else
+            # No release for this tag: do nothing. 
+            echo "No release found for $TAG; skipping asset upload (create the release to attach assets)."
+          fi
