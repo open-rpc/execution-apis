@@ -1,11 +1,6 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
-  # Manually cutting a release in the UI fires this (not push:tags), so the build
-  # still runs and uploads assets onto the release you just published.
   release:
     types: [published, prereleased]
   workflow_dispatch:

@@ -4,7 +4,7 @@ This directory drives three kinds of automation: the **release pipeline** (tag �
 
 ## Workflows
 
-- [release.yaml](release.yaml) — `push tag v*.*.*` or `workflow_dispatch`. Full release: build, version snapshot, Pages deploy, GitHub Release, stamped spec branch.
+- [release.yaml](release.yaml) — `release: published|prereleased` or `workflow_dispatch`. Full release: build, version snapshot, Pages deploy, GitHub Release, stamped spec branch. A bare tag push does **not** trigger it (publishing the release does), so one logical release produces exactly one run.
 - [sync-release-notes.yaml](sync-release-notes.yaml) — `release: published|edited` or `workflow_dispatch`. Mirrors release notes into `docs-releases/` via PR.
 - [publish-spec.yaml](publish-spec.yaml) — `workflow_dispatch` only. Manual recovery: re-push `assembled-spec` from existing release assets. The automatic stamped-spec publish is the `publish-spec` job inside [release.yaml](release.yaml) (`needs: github-release`).
 - [deploy.yaml](deploy.yaml) — `push: main` or dispatch. Rolling Pages deploy + pushes `assembled-spec-main` (unstamped).
@@ -16,7 +16,7 @@ This directory drives three kinds of automation: the **release pipeline** (tag �
 
 ```mermaid
 flowchart TD
-  tagPush["push tag v*.*.*"] --> releaseWf
+  releasePublish["release: published/prereleased"] --> releaseWf
   dispatch["workflow_dispatch (tag input)"] --> releaseWf
 
   subgraph releaseWf [release.yaml]
@@ -50,7 +50,7 @@ flowchart LR
   deployWf --> pagesMain[("Pages: /next + latest landing")]
   deployWf -->|"force push"| assembledMain[("assembled-spec-main (unstamped)")]
 
-  tagPush["push tag v*.*.*"] --> releaseWf2[release.yaml]
+  releasePublish2["release: published"] --> releaseWf2[release.yaml]
   releaseWf2 --> assembledSpec2[("assembled-spec (stamped)")]
   releaseWf2 --> ghRel[("GitHub Release + docs-snapshot-vX.Y.Z.tar.gz")]
   ghRel -.->|"gh release download"| assembleScript["assemble-versions.js (MAX_VERSIONS=10)"]
@@ -63,7 +63,7 @@ flowchart LR
 
 ### Cut a release
 
-Tag `vX.Y.Z` on `main` and push the tag. [release.yaml](release.yaml) runs automatically; no manual steps are required for Pages, the GitHub Release, or `assembled-spec`.
+Cut a release `vX.Y.Z` (UI **Draft a new release**, or `gh release create vX.Y.Z`). Publishing the release triggers [release.yaml](release.yaml) automatically; no manual steps are required for Pages, the GitHub Release, or `assembled-spec`.
 
 ### Automated Release Notes PR
 
