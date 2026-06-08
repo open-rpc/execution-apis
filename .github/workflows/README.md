@@ -6,7 +6,7 @@ This directory drives three kinds of automation: the **release pipeline** (tag �
 
 - [release.yaml](release.yaml) — `push tag v*.*.*` or `workflow_dispatch`. Full release: build, version snapshot, Pages deploy, GitHub Release, stamped spec branch.
 - [sync-release-notes.yaml](sync-release-notes.yaml) — `release: published|edited` or `workflow_dispatch`. Mirrors release notes into `docs-releases/` via PR.
-- [publish-spec.yaml](publish-spec.yaml) — `workflow_dispatch` only. Manual recovery: re-push `assembled-spec` from existing release assets.
+- [publish-spec.yaml](publish-spec.yaml) — `workflow_dispatch` only. Manual recovery: re-push `assembled-spec` from existing release assets. The automatic stamped-spec publish is the `publish-spec` job inside [release.yaml](release.yaml) (`needs: github-release`).
 - [deploy.yaml](deploy.yaml) — `push: main` or dispatch. Rolling Pages deploy + pushes `assembled-spec-main` (unstamped).
 - [test.yaml](test.yaml) — push/PR. `make build`, speccheck, test filling, lint.
 - [test-deploy.yaml](test-deploy.yaml) — PR to `main`. Smoke-builds the site with and without a synthesized version snapshot.

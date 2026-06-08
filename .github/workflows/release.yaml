@@ -128,3 +128,28 @@ jobs:
             # No release for this tag: do nothing. 
             echo "No release found for $TAG; skipping asset upload (create the release to attach assets)."
           fi
+
+  publish-spec:
+    runs-on: ubuntu-latest
+    needs: github-release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download stamped spec artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: openrpc-spec
+      - name: setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      - name: Deploy assembled spec (stamped release)
+        env:
+          TAG: ${{ github.event.inputs.tag || github.event.release.tag_name || github.ref_name }}
+        run: |
+          git checkout -b assembled-spec
+          git add -f openrpc.json
+          git add -f refs-openrpc.json
+          git commit -m "release ${TAG}"
+          git push -fu origin assembled-spec
