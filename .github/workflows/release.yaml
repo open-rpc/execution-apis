@@ -56,9 +56,10 @@ jobs:
         run: npm run spec:set-version -- --version "$TAG"
 
       - name: Build docs
+        # Spec is already built (make build) and stamped (spec:set-version).
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run build:docs
+        run: npm run docs:copy && npm run build:docusaurus
 
       - name: Snapshot versioned docs
         run: |
